@@ -1,0 +1,50 @@
+# This workflow will build a docker container, publish it to Azure Container Registry, and deploy it to Azure Kubernetes Service.
+#
+# To configure this workflow, Set up the following secrets in your workspace: 
+#     a. AZURE_CONTAINER_REGISTRY, AZURE_REGISTRY_USERNAME, AZURE_REGISTRY_PASSWORD with ACR name, username and password
+#     b. AKS_CLUSTER_NAME, AKS_RESOURCE_GROUP and AKS_NAMESPACE with AKS cluster name, resource group name and namespace
+#     c. AZURE_CREDENTIALS with the output of `az ad sp create-for-rbac --sdk-auth`
+#     d. All the other app specific config parameters
+
+
+name: Build & Deploy to AKS
+on: [push]
+env:
+  CONFIG_PORT: '8888'
+  REGISTRY_PORT: '8761'
+  GATEWAY_PORT: '4000'
+  ACCOUNT_SERVICE_PORT: '6000'
+  AUTH_SERVICE_PORT: '5000'
+  STATISTICS_SERVICE_PORT: '7000'
+  NOTIFICATION_SERVICE_PORT: '8000'
+  IMAGE_TAG: ga-${{ github.sha }} 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    # Fetch secrets from Azure Key Vault
+    - uses: Azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Azure key vault - Get Secrets
+      uses: azure/get-keyvault-secrets@v1
+      with:
+       keyvault: ${{ secrets.AZURE_KEY_VAULT }}
+       secrets:  '*'
+    
+    - run: |
+         export CONTAINER_REGISTRY=${{ env.AZURE-CONTAINER-REGISTRY }}
+         export IMAGE_TAG=${{ env.IMAGE_TAG }}
+         echo 'Install ACR AAD credential helper and login'
+          curl -L https://aka.ms/acr/installaad/bash | /bin/bash
+          az acr login -n ${{ env.AZURE-CONTAINER-REGISTRY }}
+
+          echo 'Start Build'
+          
+          cd ../account-service
+          mvn compile jib:build 
+               
+          echo 'Build complete'
