@@ -44,7 +44,6 @@ jobs:
 
           echo 'Start Build'
           
-          cd ../account-service
           mvn compile jib:build 
                
           echo 'Build complete'

@@ -58,7 +58,12 @@
 				<version>1.8.0</version>
 				<configuration>
 					<to>
-						<image>${CONTAINER_REGISTRY}.azurecr.io/${parent.artifactId}-${project.name}:${IMAGE_TAG}</image>
+						<image>eommoRegistry.azurecr.io/${parent.artifactId}-${project.name}:latest</image>
+						<!-- <image>${CONTAINER_REGISTRY}.azurecr.io/${parent.artifactId}-${project.name}:${IMAGE_TAG}</image> -->
+						<auth>
+							<username>eommoRegistry</username>
+							<password>jCKQktQQQ87bMC=Hoc6rVm+QZA5eXhPY</password>
+						</auth>
 					</to>
 				</configuration>
 			</plugin>
