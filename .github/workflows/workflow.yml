@@ -26,14 +26,14 @@ jobs:
     - uses: actions/checkout@master
     
     # Fetch secrets from Azure Key Vault
-    - uses: Azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Azure key vault - Get Secrets
-      uses: azure/get-keyvault-secrets@v1
-      with:
-       keyvault: ${{ secrets.AZURE_KEY_VAULT }}
-       secrets:  '*'
+    # - uses: Azure/login@v1
+    #   with:
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+    # - name: Azure key vault - Get Secrets
+    #   uses: azure/get-keyvault-secrets@v1
+    #   with:
+    #    keyvault: ${{ secrets.AZURE_KEY_VAULT }}
+    #    secrets:  '*'
     
     - run: |
          export CONTAINER_REGISTRY=${{ secrets.AZURE_CONTAINER_REGISTRY }}
